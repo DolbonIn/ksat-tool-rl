@@ -1,0 +1,23 @@
+{
+  "schema_version": "tool-rl-v2",
+  "id": "DEMO-001",
+  "demo_only": true,
+  "family_id": "DEMO-LINEAR",
+  "split": "train",
+  "public": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "실수 x가 3x+5=20을 만족할 때 x를 구하시오."
+      }
+    ],
+    "tools_profile": "math_v1",
+    "assets": []
+  },
+  "grader_private": {
+    "answer_type": "numeric",
+    "answer": "5",
+    "checker": "exact_rational"
+  },
+  "note": "형식 설명용 자작 문항. grader_private는 policy/sandbox에 노출하지 않는다. 이 분리는 물리적 격리 구현을 대신하지 않는다."
+}

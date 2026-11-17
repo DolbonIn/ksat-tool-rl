@@ -1,0 +1,57 @@
+spec_version: '1.0'
+reviewed_at: '2026-11-18'
+status: proposed_starting_recipe_not_proven_optimum
+student:
+  model_id: REQUIRED
+  model_revision: REQUIRED
+  tokenizer_revision: REQUIRED
+  target_class: 3_to_4B_on_device
+  deployment: no_tool
+  serialization: verify_chat_template_and_loss_mask
+corpus:
+  expected_basic_slots: 5145
+  current_original_questions: 0
+  current_solution_drafts: 28
+  current_training_ready: 0
+split:
+  unit: connected_problem_passage_derivative_families
+  train_administration_years: [2021, 2022, 2023]
+  validation_administration_years: [2024]
+  test_administration_years: [2025]
+  estimated_slots_before_dedup: {train: 3087, validation: 1029, test: 1029}
+  unresolved_grouping: quarantine
+teacher:
+  model_revisions: REQUIRED_AFTER_PILOT
+  independent_models: 2
+  candidates_initial: 4
+  candidates_hard_max: 8
+  initial_solver_sees_gold: false
+  initial_output_cap: 8192
+  hard_retry_output_cap: 16384
+  repair_rounds_max: 2
+  answer_key_majority_override: false
+lengths:
+  unit: target_tokenizer_tokens
+  short_solve: [256, 1024]
+  standard_solve: [1024, 2048]
+  hard_solve: [2048, 4096]
+  exceptional_solve_cap: 8192
+  context_cap_initial: 16384
+  hard_truncation: forbidden
+  detailed_teaching_solution: separate_output_mode
+pilot:
+  train_unique_problems: 1000
+  raw_candidates: [4000, 8000]
+  accepted_sft_target: [2000, 4000]
+v1:
+  unique_domain_training_problems_target: [15000, 25000]
+  sft_samples_target: 80000
+  mix: {solve: 40000, verify: 12000, repair: 12000, compact_correct: 8000, general_replay: 8000}
+  preference_pairs_optional: [5000, 15000]
+  rl_prompt_pool: [5000, 10000]
+  initial_grpo_generations_per_prompt: 8
+  expand_only_if_dev_improves: true
+export:
+  implementation_scope: text_only_solve_sft_and_exact_choice_or_rational_rl
+  default_tier: human_reviewed_gold_only
+  silver_policy: define_separately_and_audit_before_export

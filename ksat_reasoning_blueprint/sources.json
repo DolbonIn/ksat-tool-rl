@@ -1,0 +1,130 @@
+[
+  {
+    "id": "S01",
+    "title": "Nemotron-Math-Proofs-v3-SFT",
+    "url": "https://huggingface.co/datasets/nvidia/Nemotron-Math-Proofs-v3-SFT",
+    "notes": "414,890 samples, 15,818 unique problems; 4 task types; counts reported by card, not independently recounted.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S02",
+    "title": "Nemotron-Math-Proofs-v3-RL",
+    "url": "https://huggingface.co/datasets/nvidia/Nemotron-Math-Proofs-v3-RL",
+    "notes": "9,597 prompts; responses and rewards generated online.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S03",
+    "title": "An Open Recipe for IMO Gold",
+    "url": "https://arxiv.org/html/2609.10712v1",
+    "notes": "2026 proof-system recipe, not a 4B KSAT accuracy guarantee.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S04",
+    "title": "Nemotron-SFT-Math-v3",
+    "url": "https://huggingface.co/datasets/nvidia/Nemotron-SFT-Math-v3",
+    "notes": "3,638,783 examples; pure CoT and Python TIR, per-record licenses.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S05",
+    "title": "OpenMathReasoning",
+    "url": "https://huggingface.co/datasets/nvidia/OpenMathReasoning",
+    "notes": "306K unique problems with solutions; 3.2M CoT, 1.7M TIR, 566K GenSelect; another 193K prompt-only problems. Rounded counts.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S06",
+    "title": "OpenThoughts3 recipe",
+    "url": "https://www.open-thoughts.ai/blog/ot3",
+    "notes": "1.2M pairs; QwQ-32B; teacher rank differs from benchmark rank; filtering did not improve their controlled experiments.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S07",
+    "title": "OpenThoughts3-1.2M",
+    "url": "https://huggingface.co/datasets/open-thoughts/OpenThoughts3-1.2M",
+    "notes": "ShareGPT conversations; 850K math, 250K code, 100K science pairs.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S08",
+    "title": "OpenR1-Math-220k",
+    "url": "https://huggingface.co/datasets/open-r1/OpenR1-Math-220k",
+    "notes": "Default subset roughly 94K problem rows, distinct from the family name; multiple candidates and verifier fields.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S09",
+    "title": "s1K",
+    "url": "https://huggingface.co/datasets/simplescaling/s1K",
+    "notes": "1,000 examples; question/solution/thinking_trajectories.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S10",
+    "title": "s1 paper",
+    "url": "https://arxiv.org/abs/2501.19393",
+    "notes": "Small selected SFT set and test-time budget scaling; not proof 1,000 samples suffice for any small model.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S11",
+    "title": "NeMo-Skills construction",
+    "url": "https://github.com/NVIDIA-NeMo/Skills/blob/main/docs/releases/openmathreasoning/dataset.md",
+    "notes": "Public generation pipeline; pin commit; do not inherit MCQ exclusion or majority answer replacement for KSAT.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S12",
+    "title": "TRL SFTTrainer",
+    "url": "https://huggingface.co/docs/trl/sft_trainer",
+    "notes": "Chat formats and masks; confirm actual tokenizer template.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S13",
+    "title": "TRL dataset formats",
+    "url": "https://huggingface.co/docs/trl/dataset_formats",
+    "notes": "SFT, preference and prompt-only formats.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S14",
+    "title": "TRL GRPOTrainer",
+    "url": "https://huggingface.co/docs/trl/grpo_trainer",
+    "notes": "Online rollouts and reward interface.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S15",
+    "title": "Nemotron multilingual",
+    "url": "https://huggingface.co/datasets/nvidia/Nemotron-SFT-Multilingual-v1",
+    "notes": "3,065,255 examples; six subsets exclude Korean; English reasoning preserved.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  },
+  {
+    "id": "S16",
+    "title": "HRM8K",
+    "url": "https://huggingface.co/datasets/HAERAE-HUB/HRM8K",
+    "notes": "Korean-English math benchmark; preserve as evaluation rather than training/evaluation overlap.",
+    "accessed": "2026-11-18",
+    "pinned_revision": null
+  }
+]

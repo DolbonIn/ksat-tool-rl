@@ -1,0 +1,320 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KSAT problem record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "problem_id",
+    "family_id",
+    "subject",
+    "split",
+    "intended_split",
+    "demo_only",
+    "source",
+    "input",
+    "gold",
+    "rights",
+    "checks"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "problem_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "family_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject": {
+      "enum": [
+        "math",
+        "korean",
+        "english"
+      ]
+    },
+    "split": {
+      "enum": [
+        "train",
+        "validation",
+        "test",
+        "quarantine"
+      ]
+    },
+    "intended_split": {
+      "enum": [
+        "train",
+        "validation",
+        "test",
+        "quarantine"
+      ]
+    },
+    "demo_only": {
+      "type": "boolean"
+    },
+    "parent_problem_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source": {
+      "type": "object"
+    },
+    "curriculum": {
+      "type": "object"
+    },
+    "input": {
+      "type": "object",
+      "required": [
+        "question",
+        "passages",
+        "choices",
+        "assets",
+        "modality"
+      ],
+      "properties": {
+        "question": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "passages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "text"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "choices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "text"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "modality": {
+          "enum": [
+            "text",
+            "image",
+            "audio",
+            "mixed"
+          ]
+        }
+      }
+    },
+    "gold": {
+      "type": "object",
+      "required": [
+        "answer_type",
+        "value",
+        "choice_id",
+        "source_ref"
+      ],
+      "properties": {
+        "answer_type": {
+          "enum": [
+            "choice",
+            "numeric",
+            "text"
+          ]
+        },
+        "value": {
+          "type": [
+            "string",
+            "number",
+            "null"
+          ]
+        },
+        "choice_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "rights": {
+      "type": "object",
+      "required": [
+        "status",
+        "evidence_ref"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "approved",
+            "restricted"
+          ]
+        },
+        "evidence_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "required": [
+        "source",
+        "parse",
+        "grouping",
+        "gold",
+        "human_review"
+      ],
+      "properties": {
+        "source": {
+          "type": "object",
+          "required": [
+            "status",
+            "report_ref"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "pending",
+                "pass",
+                "fail"
+              ]
+            },
+            "report_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "parse": {
+          "type": "object",
+          "required": [
+            "status",
+            "report_ref"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "pending",
+                "pass",
+                "fail"
+              ]
+            },
+            "report_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "grouping": {
+          "type": "object",
+          "required": [
+            "status",
+            "report_ref"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "pending",
+                "pass",
+                "fail"
+              ]
+            },
+            "report_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "gold": {
+          "type": "object",
+          "required": [
+            "status",
+            "report_ref"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "pending",
+                "pass",
+                "fail"
+              ]
+            },
+            "report_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "human_review": {
+          "type": "object",
+          "required": [
+            "status",
+            "report_ref"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "pending",
+                "pass",
+                "fail"
+              ]
+            },
+            "report_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

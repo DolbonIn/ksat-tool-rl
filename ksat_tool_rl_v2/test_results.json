@@ -1,0 +1,44 @@
+{
+  "tests": [
+    {
+      "name": "correct",
+      "passed": true
+    },
+    {
+      "name": "incorrect",
+      "passed": true
+    },
+    {
+      "name": "no_final",
+      "passed": true
+    },
+    {
+      "name": "forbidden",
+      "passed": true
+    },
+    {
+      "name": "infra_not_wrong",
+      "passed": true
+    },
+    {
+      "name": "no_call_bonus",
+      "passed": true
+    },
+    {
+      "name": "correct_floor",
+      "passed": true
+    },
+    {
+      "name": "wrong_cannot_get_evidence_bonus",
+      "passed": true
+    },
+    {
+      "name": "reject_invalid_cost",
+      "passed": true
+    }
+  ],
+  "passed": 9,
+  "actual_model_training_run": false,
+  "sandbox_implemented": false,
+  "reward_is_reference_only": true
+}

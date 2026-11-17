@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KSAT candidate trace",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "trace_id",
+    "problem_id",
+    "task",
+    "rationale_kind",
+    "solution",
+    "generation",
+    "checks",
+    "tokens"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "problem_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task": {
+      "enum": [
+        "solve",
+        "verify",
+        "repair",
+        "compress",
+        "meta_verify"
+      ]
+    },
+    "rationale_kind": {
+      "enum": [
+        "public_teacher_trace",
+        "authored_solution",
+        "legacy_explanation"
+      ]
+    },
+    "solution": {
+      "type": "object",
+      "required": [
+        "rationale",
+        "final",
+        "answer_value",
+        "choice_id",
+        "steps",
+        "evidence"
+      ],
+      "properties": {
+        "rationale": {
+          "type": "string"
+        },
+        "final": {
+          "type": "string"
+        },
+        "answer_value": {
+          "type": [
+            "string",
+            "number",
+            "null"
+          ]
+        },
+        "choice_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "steps": {
+          "type": "array"
+        },
+        "evidence": {
+          "type": "array"
+        }
+      }
+    },
+    "generation": {
+      "type": "object",
+      "required": [
+        "teacher",
+        "revision",
+        "finish_reason",
+        "gold_visible",
+        "mode"
+      ],
+      "properties": {
+        "teacher": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "revision": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "finish_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "gold_visible": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "mode": {
+          "enum": [
+            "no_tool",
+            "tool",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "required": [
+        "answer",
+        "rationale",
+        "format",
+        "human_review"
+      ],
+      "properties": {
+        "answer": {
+          "type": "object",
+          "required": [
+            "status",
+            "report_ref"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "pending",
+                "pass",
+                "fail"
+              ]
+            },
+            "report_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "rationale": {
+          "type": "object",
+          "required": [
+            "status",
+            "report_ref"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "pending",
+                "pass",
+                "fail"
+              ]
+            },
+            "report_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "format": {
+          "type": "object",
+          "required": [
+            "status",
+            "report_ref"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "pending",
+                "pass",
+                "fail"
+              ]
+            },
+            "report_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "human_review": {
+          "type": "object",
+          "required": [
+            "status",
+            "report_ref"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "pending",
+                "pass",
+                "fail"
+              ]
+            },
+            "report_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "tokens": {
+      "type": "object"
+    },
+    "legacy": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false
+}

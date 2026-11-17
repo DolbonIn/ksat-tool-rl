@@ -1,0 +1,54 @@
+spec_version: "tool-rl-v2"
+status: proposal_not_framework_launch_config
+target: small_on_device_exam_solver
+model_id: REQUIRED
+model_revision: REQUIRED
+tokenizer_revision: REQUIRED
+training_strategy:
+  first: rl_only_with_examples_annealed_2_1_0
+  fallback: small_tool_protocol_sft_then_same_rl
+  optional_sft_examples: [200, 500]
+  algorithm_initial: synchronous_grpo
+dataset:
+  math_train_unique_target: [500, 1000]
+  language_train_unique_target: [300, 500]
+  holdout_unit: passage_problem_derivative_family
+  full_solution_labels_required: false
+  verified_inputs_and_gold_required: true
+rollout:
+  group_size: 8
+  same_problem_and_initial_state_within_group: true
+  unique_problems_per_update_target: 16
+  assistant_generated_tokens_total_cap: 4096
+  tool_observation_tokens_per_call_cap: 1024
+  tool_observation_tokens_total_cap: 4096
+  max_total_tool_calls: 6
+  max_assistant_turns: 8
+  context_tokens_initial: 16384
+  tool_outputs_in_policy_loss: false
+  retain_original_token_ids_and_behavior_logprobs: true
+tools:
+  math: [math_eval, math_solve]
+  optional_sandboxed_python: false
+  language: [find_spans, read_span]
+  open_web_search: false
+  answer_oracle: false
+  private_grader_access: false
+  external_teacher_as_deployment_tool: false
+reward:
+  first_phase: exact_answer_only_with_terminal_validity_gate
+  correct: 1.0
+  incorrect: 0.0
+  invalid_or_forbidden: -1.0
+  infrastructure_failure: resample_affected_group
+  later_phase:
+    evidence_bonus_weight: 0.1
+    evidence_bonus_requires_correct_answer: true
+    maximum_cost_penalty: 0.05
+    call_count_positive_reward: 0.0
+    verbosity_positive_reward: 0.0
+evaluation:
+  pass_at_1: true
+  tool_free_regression: true
+  deployment_quantization_test: true
+  report_latency_and_total_generated_tokens: true

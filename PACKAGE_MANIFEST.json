@@ -1,0 +1,224 @@
+{
+  "package": "ksat-tool-rl",
+  "github_uploaded": false,
+  "remote_repository_created": false,
+  "proposed_repository": "DolbonIn/ksat-tool-rl",
+  "proposed_visibility": "private",
+  "actual_model_training_run": false,
+  "current_local_unit_tests": 24,
+  "current_local_unit_tests_passed": 24,
+  "source_archives": [
+    {
+      "filename": "수능_추론데이터셋_제작설계_20261118.zip",
+      "sha256": "207defbc1575b108679ca36a9bd7eed24cffa4e9fb7f83199c7832755c611ce4",
+      "preserved_files": 26
+    },
+    {
+      "filename": "수능_Tool_RL_v2_설계.zip",
+      "sha256": "ae495fd7cf0948fe03da5daa5ee77bd54425a6ddb01a3a9946e1b1938c225fd9",
+      "preserved_files": 5
+    }
+  ],
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 121,
+      "sha256": "d11c8261960c336b43515a3e13a6b6370f4ea3384bb7a0e86fa749bcaaec1ff6"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 199,
+      "sha256": "d1780afdf407ad53c5a799612346d248ae986f755626c47a99914c50a8794652"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4148,
+      "sha256": "141ebca9916d3e063e39484403da8ac274b0276fa479aa91665f153a36cb0190"
+    },
+    {
+      "path": "checks/test_reward.py",
+      "bytes": 2070,
+      "sha256": "6fd90a039f8ece27f398b1963ee719878443915f6b4334c59f67c82169509bca"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/MANIFEST.json",
+      "bytes": 3388,
+      "sha256": "12569e3e31fe4b96e9d53494cf65b9b332bd63305b7d8881b1a84e72383a4725"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/README.md",
+      "bytes": 19042,
+      "sha256": "39fddc8a5a7f327d2b6a35a9738a5265f106c9a77b50fbbbabeb73c27331fecc"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/examples/README.md",
+      "bytes": 566,
+      "sha256": "3904bffebc2282de10139a6b53e16e1c9121c6f853fc2219f05df6ac40529b84"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/examples/preference.demo.jsonl",
+      "bytes": 450,
+      "sha256": "62eb2c92976cb4b8eeea1321b45f593a2ac891941afa1accd7feac2443c432fb"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/examples/rl.demo.jsonl",
+      "bytes": 211,
+      "sha256": "185b9fd936f43e228671b6ce7be9f93983e411e64e20ef17585cdbcf915347e6"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/examples/sft_native_fields.demo.jsonl",
+      "bytes": 336,
+      "sha256": "3a3940f154bdf50f86667023b848f9c54134c51c23022c1b19bd8acfc1dc2fb5"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/examples/sft_think_tags.demo.jsonl",
+      "bytes": 346,
+      "sha256": "f725300576db265480c6ece94f8d9767b03e30bcb4f16d4281f8caaf3fe08dfc"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/legacy/problems_28.jsonl",
+      "bytes": 30893,
+      "sha256": "db616748449c03cde3b3757b7a339d381a0448ab4d084ab59a209197106e1519"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/legacy/traces_28.jsonl",
+      "bytes": 76233,
+      "sha256": "e9e90de45e3415498c6c4fc3434e30215335f61ac8160f2c5a96918b4b4a8793"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/prompts/01_blind_solver.md",
+      "bytes": 1147,
+      "sha256": "e03f43763a0b26ad5d0b9d97407dcf56cecfb32e7b3a7c37e446c6dcebf5d404"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/prompts/02_verifier.md",
+      "bytes": 886,
+      "sha256": "9c6e568632d1c271aadc12cc917411eba769109b65a947a2bd5bbd119c8a3df5"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/prompts/03_repair.md",
+      "bytes": 597,
+      "sha256": "9e4f9dbde8ea9b1e66f7b93f31bcad1406ea65bf39536fee3d5d3c26d30d7921"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/prompts/04_compact.md",
+      "bytes": 406,
+      "sha256": "eea1b9b0e58c0b337d6d4fd905ade3c801e80e1c3a44c0325bfc13e4da105eba"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/recipe.yaml",
+      "bytes": 1885,
+      "sha256": "690dfe65495d9fe9842bcea6946cbf157d5e1ff3ca542374f0b0d5cd3ee2d440"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/reports/build_summary.json",
+      "bytes": 625,
+      "sha256": "73a6618e3fbeed18e004dc8ebcbf218a5e9e67d2cf1bfebec98b9d60d4664f22"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/reports/legacy_audit/audit.json",
+      "bytes": 21141,
+      "sha256": "05ef831a8eb459d59e27c3f997de0df890502dc7ca56ebf1dab7b34b03d9a2b5"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/reports/legacy_audit/rl.jsonl",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/reports/legacy_audit/sft.jsonl",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/reports/unit_tests.txt",
+      "bytes": 1915,
+      "sha256": "0d18f8cc4cb4d6fcf282ae66b15d5acdbaa437bca8493b59c03365aaf5d19c9e"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/requirements.txt",
+      "bytes": 20,
+      "sha256": "4046ca1e3a64f4ea791fb4fb3d8566242086ff1c8e2431e2c349e1052ffc6ba0"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/schemas/problem.schema.json",
+      "bytes": 6119,
+      "sha256": "02bd6914caa83ef949f5f06b6e47a922bf6ddfd10be9916a5a7de283760f5110"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/schemas/trace.schema.json",
+      "bytes": 4440,
+      "sha256": "a60c11d10b988fca347200b0bb38f6e7258b6a57f2e4875afde6a8f324365aac"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/scripts/audit_and_export.py",
+      "bytes": 9277,
+      "sha256": "3f19bb5ccf0774a40b4a36b8126ca516c74c9f1aba49231d6cd1be0aefc417ed"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/sources.json",
+      "bytes": 4548,
+      "sha256": "2e4f01cf78f93362deb49be1803648d8e0c75b2b113300ad91825891556d9a02"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/sources.md",
+      "bytes": 2806,
+      "sha256": "6efa800bc4684602a649426a3814dad44f9a52ea93379d50494ac59d6e43f5b1"
+    },
+    {
+      "path": "ksat_reasoning_blueprint/tests/test_exporter.py",
+      "bytes": 3521,
+      "sha256": "6e4c4364de2e9b1cf5d5fe239e6f9029ff15ed8639d0a45673f6dab7bb2d128f"
+    },
+    {
+      "path": "ksat_tool_rl_v2/README.md",
+      "bytes": 11403,
+      "sha256": "50fd60a8da1cef87b380c0513e5ce0c8de6279d1454055504ee5f841caa1f1f6"
+    },
+    {
+      "path": "ksat_tool_rl_v2/episode.demo.json",
+      "bytes": 615,
+      "sha256": "20e7f10be7ad7a8353e795825ed92955a5e8ebfc3a2314295e0bdb748059314c"
+    },
+    {
+      "path": "ksat_tool_rl_v2/recipe.yaml",
+      "bytes": 1774,
+      "sha256": "ceca9d2bf1123fa3bd4e02bf85a156af6190fc05641e300ed5c5fe491bb9460f"
+    },
+    {
+      "path": "ksat_tool_rl_v2/reward_reference.py",
+      "bytes": 1363,
+      "sha256": "9eaa5bc089d7148022b006414e982056c4b31425c9a000e66fd89c736855d678"
+    },
+    {
+      "path": "ksat_tool_rl_v2/test_results.json",
+      "bytes": 732,
+      "sha256": "5618a8cd8cacc5fb8dcea208a4c9965cb4f19ccc301b7679d74ae752fb0f6fae"
+    },
+    {
+      "path": "reports/local_tests.txt",
+      "bytes": 1842,
+      "sha256": "f2d50579e793997ad881187cf5cb0c86d313578d6a047d4616786f9c984e692a"
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 45,
+      "sha256": "4419de4a416cfc23248a9da89b96f4596473e12ee2a4a8e01117eac4581efafa"
+    },
+    {
+      "path": "scripts/publish.sh",
+      "bytes": 1743,
+      "sha256": "3a54eadf6d0bf43cb3c1cc6a7454cc0e8b007894d8862eb963fa350d1f15d59b"
+    },
+    {
+      "path": "scripts/run_checks.sh",
+      "bytes": 243,
+      "sha256": "995ac937772676d5efd824db526c3834d908aee5e8210e6eaf33371c8d5a51d3"
+    },
+    {
+      "path": "scripts/verify_manifest.py",
+      "bytes": 973,
+      "sha256": "35d05e5bfc62db9183ce4ff78ee5cc5e5d12554e3ca1bb391aff5a33d1e18378"
+    }
+  ]
+}
