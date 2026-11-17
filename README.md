@@ -35,6 +35,7 @@ scripts/publish.sh        # 사용자의 gh 인증으로 비공개 신규 저장
 scripts/verify_manifest.py # 패키지 파일 SHA-256 대조
 checks/test_reward.py     # 재실행 가능한 보상 함수 단위 테스트
 reports/                  # 이번 패키징의 실제 로컬 검사 결과
+experiments/csat2026_baseline/ # 2026 수능 베이스라인 평가 결과(Nanbeige4.2-3B, gemma-4-E4B-it)
 PACKAGE_MANIFEST.json     # 파일별 무결성 목록; GitHub 업로드 기록이 아님
 ```
 

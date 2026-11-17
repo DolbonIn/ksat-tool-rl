@@ -1,0 +1,61 @@
+# 2026학년도 수능 베이스라인 평가 (2026-11-18)
+
+RL 학습 **전** 소형 모델의 2026학년도 수능(홀수형) 정답률 베이스라인입니다. 로컬 SGLang 서버(OpenAI 호환 API)에서 문항마다 8회 샘플링했습니다.
+
+- **모델:** `Nanbeige4.2-3B`(Nanbeige SGLang fork `nbg42`, `--reasoning-parser nanbeige`, dp=8), `gemma-4-E4B-it`
+- **샘플링:** temperature 0.6, top_p 0.95, top_k 20, thinking 활성화, max_tokens 65536, 문항당 n=8
+- **채점:** 응답 본문(content)의 마지막 `\boxed{}` 값을 공식 정답과 비교합니다. 객관식에서는 원문자 ①~⑤를 숫자로 변환합니다. 형식 오류(박스 없음)는 오답으로 처리합니다.
+- **점수 표기:** 기대 = 배점 × 문항별 정답률의 합 / 회차별 = 8회 각각의 원점수 범위 / 다수결 = 8회 다수결 답의 점수
+
+## 결과 요약
+
+### 수학 — Nanbeige4.2-3B
+
+| 선택과목 | 기대점수 | 회차별 | 다수결 |
+|---|---:|---:|---:|
+| 확률과 통계 | 95.0 | 92~100 | 96 |
+| 미적분 | 92.5 | 92~96 | 92 |
+| 기하 | 89.5 | 88~92 | 88 |
+
+368개 생성, 잘림·오류 0건, 평균 9,134 토큰
+
+### 국어·영어
+
+| 실행 | 모델 | 프롬프트 | 국어(화작) | 국어(언매) | 영어 | 박스 누락 | 평균 토큰 |
+|---|---|---|---:|---:|---:|---:|---:|
+| `kor_eng` | Nanbeige4.2-3B | 기본 | 61.1 (다수결 62) | 55.8 (55) | 90.0 (90) | 1 | 6,725 |
+| `kor_eng_gemma4` | gemma-4-E4B-it | 기본 | 65.9 (72) | 60.5 (63) | 87.6 (92) | 16 | 1,757 |
+| `kor_eng_gemma4_lenient` | gemma-4-E4B-it | 기본 + 관대한 답 추출 | 66.9 (72) | 61.5 (63) | 90.2 (92) | – | – |
+| `kor_eng_gemma4_v2` | gemma-4-E4B-it | system 형식 지시 + 끝 리마인더 | 62.1 (68) | 56.0 (59) | 91.1 (92) | 33 | 1,769 |
+| `kor_eng_gemma4_v3` | gemma-4-E4B-it | 1-shot 형식 데모 | 63.0 (69) | 56.2 (58) | 89.4 (89) | 23 | 1,610 |
+
+수치는 100점 만점 기대점수이고 괄호 안은 다수결 점수입니다. 생성은 실행마다 808개입니다.
+
+- 영어 듣기(1~17번)는 음원 대신 **공식 듣기 대본 텍스트**를 제공했으므로 실제 듣기 평가와 다릅니다.
+- `lenient`는 `kor_eng_gemma4` 결과를 다시 생성하지 않고 `code/lenient.py`로 다시 채점한 것입니다. `\boxed{}`가 없으면 '정답: N' 표기나 응답 끝부분의 선택지 번호를 답으로 인정합니다.
+- gemma에서 형식 지시(v2)와 1-shot(v3)을 추가했지만 박스 누락이 줄지 않았고 국어 점수는 오히려 떨어졌습니다.
+- 그림·도표·이미지는 문서 OCR 형식의 텍스트로 옮겨 제공했습니다.
+
+### 과학탐구 — 진행 중
+
+`solve_mc.py units_science.json`(8과목 × 20문항 × 8회 = 1,280개)는 업로드 시점에 실행 중이었습니다. `logs/solve_science.log`는 부분 로그입니다.
+
+## 파일
+
+```text
+code/      solve.py(수학), solve_mc.py(국어·영어·과탐 객관식), report*.py(집계), lenient.py, build_*.py(문항 빌드), Dockerfile(SGLang 이미지)
+results/   *.jsonl.gz — 생성 1건당 1줄: id, sample, pred, correct, tokens, finish, content, reasoning
+reports/   report.py / report_mc.py 출력(문항별 정답률·응답 분포 포함)
+logs/      실행 로그
+```
+
+## 포함하지 않은 것
+
+저장소의 데이터 경계 원칙(README 참조)에 따라 **기출 원문은 넣지 않았습니다**. 문제지·정답표 텍스트(`data/`), 문항 프롬프트(`units_*.json`, `problems.py`), 그림 OCR 보정본(`supplements_kor_eng.py`)이 여기에 해당합니다. 그래서 `code/`의 스크립트는 이 저장소만으로는 재실행되지 않습니다. 결과 파일의 `content`/`reasoning`은 모델 출력이며, 그 안에 지문 일부가 인용되어 있을 수 있습니다.
+
+집계 재실행 예시(원본 문항 파일이 있을 때):
+
+```bash
+python3 code/report.py results.jsonl                              # 수학
+python3 code/report_mc.py results_kor_eng.jsonl units_kor_eng.json # 국어·영어
+```
