@@ -1,0 +1,5 @@
+# Lightweight CPU tools image for the KSAT math data pipeline (PDF render, parquet, HTTP).
+FROM python:3.12-slim
+RUN apt-get update && apt-get install -y --no-install-recommends poppler-utils curl ca-certificates fonts-noto-cjk && rm -rf /var/lib/apt/lists/*
+RUN pip install --no-cache-dir pymupdf==1.26.4 pandas pyarrow requests beautifulsoup4 lxml openai==1.109.1 pillow pdfplumber
+WORKDIR /work

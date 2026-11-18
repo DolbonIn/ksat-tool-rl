@@ -1,0 +1,5 @@
+# Custom agent loops (actor_rollout_ref.rollout.agent.agent_loop_config_path).
+# ksat_tool_agent = veRL ToolAgentLoop + per-trajectory tool stats + infra-fault masking (rl/ksat_rl/tools/verl_agent_loop.py).
+- name: ksat_tool_agent
+  _target_: ksat_rl.tools.verl_agent_loop.KsatToolAgentLoop
+  mask_infra_faults: true

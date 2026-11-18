@@ -20,10 +20,13 @@
 | 텍스트 데이터 검사 및 SFT/RL export | 포함 |
 | 기존 해설 초안 | 28개; 원문 미확보·미승인 상태 유지 |
 | 실제 기출 원문·도형·음원 | 포함하지 않음 |
-| 실제 도구 sandbox, 학습기 연동, GRPO 학습 실행 | 미구현/미실행 |
-| 검수 완료 학습용 기출 | 0개 |
+| 실제 도구 sandbox, 학습기 연동, GRPO 학습 실행 | **구현·실행 (2026-11-19)**: `rl/` (veRL + SGLang, Nanbeige4.2-3B 수학 GRPO 1단계 완료), 도구 RL은 연동 및 GPU smoke test까지 |
+| 검수 완료 학습용 기출 | 수학 1,564 (2022–26) + 2,099 (2017–21), 국어·영어·과탐·사탐 13,268. 데이터는 저장소 밖 `/raid/cache/b300-07/ksat-rl/data/` (재배포 금지) |
+| 모바일 배포 (Qualcomm GenieX) | GGUF 변환·검증, 양자화, Hexagon/Adreno 패치, Android/Linux arm64 빌드: `mobile/` |
 
-이 저장소는 완성된 학습 파이프라인이나 완성 기출 데이터셋이 아닙니다. 논문·모델·버전 관련 기존 문서의 주장과 출처는 원문 보존이며, 이번 저장소 패키징에서 재검증하지 않았습니다.
+**실행 방법은 [`GUIDE.md`](GUIDE.md)를 먼저 보세요.** 학습된 모델(8비트 GGUF)은 HF `sionic-ai/Nanbeige4.2-3B-KSAT-Math-RL-Q8_0-GGUF`(비공개)에 있습니다. 2026 수능 수학 결과(16회 기대점수): 확통 96.4 → 97.3, 미적 92.6 → 97.5, 기하 95.2 → 95.5 ([`experiments/math_rl_v1/`](experiments/math_rl_v1/)).
+
+아래 설계 문서의 주장과 출처는 원문 보존이며, 위 구현 결과와 별개로 재검증하지 않았습니다. 논문·모델·버전 관련 기존 문서의 주장과 출처는 원문 보존이며, 이번 저장소 패키징에서 재검증하지 않았습니다.
 
 ## 구조
 
@@ -36,6 +39,11 @@ scripts/verify_manifest.py # 패키지 파일 SHA-256 대조
 checks/test_reward.py     # 재실행 가능한 보상 함수 단위 테스트
 reports/                  # 이번 패키징의 실제 로컬 검사 결과
 experiments/csat2026_baseline/ # 2026 수능 베이스라인 평가 결과(Nanbeige4.2-3B, gemma-4-E4B-it)
+experiments/math_rl_v1/   # 수학 GRPO 1단계 결과(2026 수능 평가 보고서·생성 결과, 학습 step 로그)
+rl/                       # RL 파이프라인: Docker 이미지·veRL 패치·학습용 Nanbeige 구현·보상·평가·도구 RL
+data_pipeline/            # 기출 데이터 구축(OCR·정답표·검증) 스크립트 — 데이터 자체는 저장소 밖
+mobile/                   # Qualcomm GenieX 모바일 배포: 패치·빌드·기기 벤치마크·런북
+GUIDE.md                  # 모델 실행·평가·학습 재현·모바일 배포 가이드
 PACKAGE_MANIFEST.json     # 파일별 무결성 목록; GitHub 업로드 기록이 아님
 ```
 

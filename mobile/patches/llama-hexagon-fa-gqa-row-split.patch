@@ -1,0 +1,25 @@
+diff --git a/ggml/src/ggml-hexagon/htp/flash-attn-ops.c b/ggml/src/ggml-hexagon/htp/flash-attn-ops.c
+index 0b7fc2d..895d378 100644
+--- a/ggml/src/ggml-hexagon/htp/flash-attn-ops.c
++++ b/ggml/src/ggml-hexagon/htp/flash-attn-ops.c
+@@ -2764,6 +2764,20 @@ int op_flash_attn_ext(struct htp_ops_context * octx) {
+     factx.qrow_start       = qrow_start;
+     factx.qrows_per_hvx    = fastdiv(qrows + n_hvx - 1, &octx->n_hvx_div);
+ 
++    // GQA decode (one query row per head): rows [g*G, (g+1)*G) share KV head g, and the worker batches them
++    // (G_local) so each K/V block is streamed once per group. An even row split cuts groups across threads
++    // whenever ceil(qrows / n_hvx) is not a multiple of G, and every cut group streams its KV head again:
++    // G = 6 (e.g. 48 query / 8 KV heads) with 5 or 6 HVX threads streams 11-12 KV heads instead of 8.
++    // Hand out whole groups instead; every row is still processed exactly once.
++    {
++        const uint32_t G = kparams->G;
++        if (neq1 == 1 && G > 1 && G <= FA_HVX_G_MAX && (qrow_start % G) == 0 && (qrows % G) == 0 &&
++            (mask == NULL || mask->ne[2] == 1)) {
++            const uint32_t n_groups = qrows / G;
++            factx.qrows_per_hvx = ((n_groups + n_hvx - 1) / n_hvx) * G;
++        }
++    }
++
+     const bool has_mask  = (mask != NULL);
+     const bool has_sinks = (octx->src[4] != NULL);
+     struct hvx_fa_vtcm_layout L;

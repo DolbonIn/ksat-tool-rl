@@ -1,0 +1,54 @@
+문항               배점    정답     정답률       다수결      평균토큰
+2026-csat-common-1   2     1    100%         1       980
+2026-csat-common-2   2     4    100%         4      1998
+2026-csat-common-3   3     5    100%         5      1427
+2026-csat-common-4   3     3    100%         3      1681
+2026-csat-common-5   3     3    100%         3      1581
+2026-csat-common-6   3     2    100%         2      1774
+2026-csat-common-7   3     5    100%         5      2444
+2026-csat-common-8   3     1     88%         1      2290
+2026-csat-common-9   4     4     38%         5      3021
+2026-csat-common-10   4     3    100%         ③      4722
+2026-csat-common-11   4     3     88%         3      3907
+2026-csat-common-12   4     2    100%         2      2648
+2026-csat-common-13   4     5    100%         5      3815
+2026-csat-common-14   4     4      0%      None     19026
+2026-csat-common-15   4     4     62%         4      9781
+2026-csat-common-16   3     9    100%         9       779
+2026-csat-common-17   3    16    100%        16       940
+2026-csat-common-18   3    12    100%        12      1318
+2026-csat-common-19   3    15    100%        15      3274
+2026-csat-common-20   4   130     50%       130      6419
+2026-csat-common-21   4    65     25%        65     50066
+2026-csat-common-22   4   457     38%       457     15515
+2026-csat-prob_stat-23   2     3    100%         3      1297
+2026-csat-prob_stat-24   3     1    100%         1      1441
+2026-csat-prob_stat-25   3     2     88%         2      2716
+2026-csat-prob_stat-26   3     5    100%         5      1800
+2026-csat-prob_stat-27   3     4     50%         5      3290
+2026-csat-prob_stat-28   4     2     88%         2      9072
+2026-csat-prob_stat-29   4   977     62%       977      4661
+2026-csat-prob_stat-30   4   262     88%       262      9646
+2026-csat-calculus-23   2     3    100%         3       955
+2026-csat-calculus-24   3     4     88%         4      1613
+2026-csat-calculus-25   3     3     88%         ③      4482
+2026-csat-calculus-26   3     1    100%         1      3040
+2026-csat-calculus-27   3     2     88%         2      3268
+2026-csat-calculus-28   4     5     88%         ⑤      7285
+2026-csat-calculus-29   4    97     50%        97     20832
+2026-csat-calculus-30   4    11     12%        11     37810
+2026-csat-geometry-23   2     3    100%         3       662
+2026-csat-geometry-24   3     1    100%         1      1247
+2026-csat-geometry-25   3     5    100%         5      1594
+2026-csat-geometry-26   3     2    100%         2      5346
+2026-csat-geometry-27   3     4     88%         4     12626
+2026-csat-geometry-28   4     4     25%         4     55220
+2026-csat-geometry-29   4   360     75%       360     26535
+2026-csat-geometry-30   4   221     62%       221     15648
+
+[확률과 통계] 기대점수 79.2/100 | 회차별 [62, 73, 85, 84, 84, 92, 84, 70] (min 62, max 92) | 다수결(8회) 89/100
+[미적분] 기대점수 76.5/100 | 회차별 [68, 69, 81, 84, 77, 92, 80, 61] (min 61, max 92) | 다수결(8회) 92/100
+[기하] 기대점수 77.8/100 | 회차별 [64, 76, 73, 84, 84, 92, 84, 65] (min 64, max 92) | 다수결(8회) 92/100
+
+잘림(length) 10건, 오류 1건, 총 368건, 전체 정답률 0.8098, 평균 토큰 8076
+{"calls_per_episode": {"0": 53, "1": 102, "2": 70, "3": 43, "4": 33, "5": 23, "6": 44}, "mean_calls": 2.397, "episodes_with_tool": 315, "tool_status": {"calls": 882, "ok": 561, "error": 213, "invalid": 108}, "finish": {"stop": 318, "tool_budget": 39, "length": 10, "error: Server discon": 1}, "tool_demos": 0}

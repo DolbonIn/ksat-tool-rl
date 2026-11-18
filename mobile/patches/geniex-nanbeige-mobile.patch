@@ -1,0 +1,254 @@
+diff --git a/sdk/CMakeLists.txt b/sdk/CMakeLists.txt
+index faf5ecf..27c29aa 100644
+--- a/sdk/CMakeLists.txt
++++ b/sdk/CMakeLists.txt
+@@ -174,13 +174,35 @@ enable_testing()
+ #   GEMV to the 1row kernel when CL_KERNEL_WORK_GROUP_SIZE is below the 64x16
+ #   work-group it launches. Adreno 663 caps it at 896, so clEnqueueNDRangeKernel
+ #   returned -54 and aborted gemma-4 on IQ-9075.
++# * llama-vocab-spm-prepend-first.patch makes the SPM tokenizer honor the GGUF's
++#   tokenizer.ggml.metaspace.prepend_scheme = "first" (HF Metaspace), which upstream
++#   only implements for BPE: SPM added a U+2581 prefix after every special token,
++#   so Nanbeige4.2 chat prompts came out as "<|im_start|>▁system", "<think>▁\n" --
++#   ids the model never saw in training (0/46 CSAT prompts matched the HF
++#   tokenizer before, 46/46 after, with the GGUF's add_bos_token set to false).
++#   Only vocabs that declare prepend_scheme "first" change behaviour.
++# * llama-looped-layer-device-map.patch assigns devices per *physical* layer for
++#   looped models (Nanbeige4.2 num_loops=2: 22 physical layers run twice, 44 KV
++#   slots). Upstream split the 44 logical layers, so with a layer split
++#   (HTP0:0,HTP0:1 / GPU+NPU) or partial -ngl all weights landed on the first
++#   device and the later loop's KV on another, bouncing every layer between
++#   devices. Now logical layer il follows physical layer il % n_layer_phys.
++# * llama-hexagon-fa-gqa-row-split.patch hands whole GQA groups to each HVX thread
++#   in the decode flash-attention kernel. The even row split cut KV-head groups
++#   when ceil(n_head / n_hvx) is not a multiple of G, re-streaming that KV head's
++#   K/V from DDR: G=6 (Nanbeige4.2, 48/8 heads) with 5/6/7 HVX threads streamed
++#   11/12/13 KV heads instead of 8. Results are bit-identical (same rows, same
++#   math); the gain is DDR traffic and needs on-device confirmation.
+ if(GENIEX_PLUGIN_LLAMA_CPP)
+     set(_LLAMA_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/../third-party/llama.cpp")
+-    set(_LLAMA_PATCHES)
++    set(_LLAMA_PATCHES
++        "${CMAKE_CURRENT_SOURCE_DIR}/patches/llama-vocab-spm-prepend-first.patch"
++        "${CMAKE_CURRENT_SOURCE_DIR}/patches/llama-looped-layer-device-map.patch")
+     if(GGML_HEXAGON)
+         list(APPEND _LLAMA_PATCHES
+             "${CMAKE_CURRENT_SOURCE_DIR}/patches/llama-hexagon-release-sessions.patch"
+-            "${CMAKE_CURRENT_SOURCE_DIR}/patches/llama-hexagon-power-mode-setter.patch")
++            "${CMAKE_CURRENT_SOURCE_DIR}/patches/llama-hexagon-power-mode-setter.patch"
++            "${CMAKE_CURRENT_SOURCE_DIR}/patches/llama-hexagon-fa-gqa-row-split.patch")
+     endif()
+     if(GGML_OPENCL)
+         list(APPEND _LLAMA_PATCHES
+diff --git a/sdk/patches/llama-hexagon-fa-gqa-row-split.patch b/sdk/patches/llama-hexagon-fa-gqa-row-split.patch
+new file mode 100644
+index 0000000..dc77c8b
+--- /dev/null
++++ b/sdk/patches/llama-hexagon-fa-gqa-row-split.patch
+@@ -0,0 +1,25 @@
++diff --git a/ggml/src/ggml-hexagon/htp/flash-attn-ops.c b/ggml/src/ggml-hexagon/htp/flash-attn-ops.c
++index 0b7fc2d..895d378 100644
++--- a/ggml/src/ggml-hexagon/htp/flash-attn-ops.c
+++++ b/ggml/src/ggml-hexagon/htp/flash-attn-ops.c
++@@ -2764,6 +2764,20 @@ int op_flash_attn_ext(struct htp_ops_context * octx) {
++     factx.qrow_start       = qrow_start;
++     factx.qrows_per_hvx    = fastdiv(qrows + n_hvx - 1, &octx->n_hvx_div);
++ 
+++    // GQA decode (one query row per head): rows [g*G, (g+1)*G) share KV head g, and the worker batches them
+++    // (G_local) so each K/V block is streamed once per group. An even row split cuts groups across threads
+++    // whenever ceil(qrows / n_hvx) is not a multiple of G, and every cut group streams its KV head again:
+++    // G = 6 (e.g. 48 query / 8 KV heads) with 5 or 6 HVX threads streams 11-12 KV heads instead of 8.
+++    // Hand out whole groups instead; every row is still processed exactly once.
+++    {
+++        const uint32_t G = kparams->G;
+++        if (neq1 == 1 && G > 1 && G <= FA_HVX_G_MAX && (qrow_start % G) == 0 && (qrows % G) == 0 &&
+++            (mask == NULL || mask->ne[2] == 1)) {
+++            const uint32_t n_groups = qrows / G;
+++            factx.qrows_per_hvx = ((n_groups + n_hvx - 1) / n_hvx) * G;
+++        }
+++    }
+++
++     const bool has_mask  = (mask != NULL);
++     const bool has_sinks = (octx->src[4] != NULL);
++     struct hvx_fa_vtcm_layout L;
+diff --git a/sdk/patches/llama-looped-layer-device-map.patch b/sdk/patches/llama-looped-layer-device-map.patch
+new file mode 100644
+index 0000000..ce4ca60
+--- /dev/null
++++ b/sdk/patches/llama-looped-layer-device-map.patch
+@@ -0,0 +1,39 @@
++diff --git a/src/llama-model.cpp b/src/llama-model.cpp
++index cd49ccd..256748f 100644
++--- a/src/llama-model.cpp
+++++ b/src/llama-model.cpp
++@@ -1763,8 +1763,18 @@ bool llama_model_base::load_tensors(llama_model_loader & ml) {
++         splits[i] = split_sum != 0.0f ? splits[i] / split_sum : float(i + 1) / n_devices();
++     }
++ 
++-    const int i_gpu_start = std::max(n_layer_all + 1 - n_gpu_layers, 0);
++-    const int act_gpu_layers = devices.empty() ? 0 : std::min(n_gpu_layers, n_layer_all + 1);
+++    // Looped models (Nanbeige4.2 num_loops > 1) create weights only for the n_layer_phys physical layers and
+++    // alias them for the later loops, while every logical layer keeps its own KV cache. Split the devices over
+++    // the physical layers and let logical layer il follow physical layer il % n_layer_phys, so a layer's
+++    // weights, its KV cache in every loop and its compute stay on one device (and -ngl counts physical layers).
+++    // Splitting the logical layers instead puts all weights on the first device and only KV on the others.
+++    int n_layer_split = n_layer_all;
+++    if (const auto * lm = dynamic_cast<const llama_model_nanbeige *>(this); lm && lm->n_loops > 1 && lm->n_layer_phys > 0) {
+++        n_layer_split = lm->n_layer_phys;
+++    }
+++
+++    const int i_gpu_start = std::max(n_layer_split + 1 - n_gpu_layers, 0);
+++    const int act_gpu_layers = devices.empty() ? 0 : std::min(n_gpu_layers, n_layer_split + 1);
++     auto get_layer_buft_list = [&](int il) -> llama_model::impl::layer_dev {
++         const bool is_swa = il < n_layer_all && hparams.is_swa(il);
++         if (il < i_gpu_start || (il - i_gpu_start) >= act_gpu_layers) {
++@@ -1784,11 +1794,11 @@ bool llama_model_base::load_tensors(llama_model_loader & ml) {
++     // assign the repeating layers to the devices according to the splits
++     pimpl->dev_layer.resize(n_layer_all);
++     for (int il = 0; il < n_layer_all; ++il) {
++-        pimpl->dev_layer[il] = get_layer_buft_list(il);
+++        pimpl->dev_layer[il] = get_layer_buft_list(il % n_layer_split);
++     }
++ 
++     // assign the output layer
++-    pimpl->dev_output = get_layer_buft_list(n_layer_all);
+++    pimpl->dev_output = get_layer_buft_list(n_layer_split);
++ 
++     const auto TENSOR_NOT_REQUIRED = llama_model_loader::TENSOR_NOT_REQUIRED;
++ 
+diff --git a/sdk/patches/llama-vocab-spm-prepend-first.patch b/sdk/patches/llama-vocab-spm-prepend-first.patch
+new file mode 100644
+index 0000000..55dc0eb
+--- /dev/null
++++ b/sdk/patches/llama-vocab-spm-prepend-first.patch
+@@ -0,0 +1,41 @@
++diff --git a/src/llama-vocab.cpp b/src/llama-vocab.cpp
++index 229a051..dff1d7f 100644
++--- a/src/llama-vocab.cpp
+++++ b/src/llama-vocab.cpp
++@@ -3828,7 +3828,7 @@ std::vector<llama_token> llama_vocab::impl::tokenize(
++                 // tokenizer.encode('', add_special_tokens=True)  returns [1]
++                 // tokenizer.encode('', add_special_tokens=False) returns []
++ 
++-                // TODO: honor metaspace_prepend_scheme (add_space_prefix currently behaves like "always")
+++                // add_space_prefix behaves like "always" unless the vocab declares metaspace prepend_scheme "first"
++                 bool is_prev_special = true;  // prefix with space if first token
++ 
++                 if (add_special && add_bos) {
++@@ -3841,12 +3841,22 @@ std::vector<llama_token> llama_vocab::impl::tokenize(
++                     if (fragment.type == FRAGMENT_BUFFER_VARIANT_TYPE_RAW_TEXT) {
++                         std::string text;
++ 
++-                        // prefix with space if previous is special
++-                        if (add_space_prefix && is_prev_special) {
++-                            text = ' ';
++-                        }
+++                        if (metaspace_prepend_scheme == LLAMA_METASPACE_PREPEND_SCHEME_FIRST) {
+++                            // HF Metaspace prepend_scheme "first" (e.g. Nanbeige4.2): only the text at the very start of
+++                            // the input gets the U+2581 prefix, and only if it does not already start with a space.
+++                            // Text after a special token (<|im_start|>system, <think>\n, ...) is not prefixed.
+++                            text = fragment.raw_text.substr(fragment.offset, fragment.length);
+++                            if (add_space_prefix && &fragment == &fragment_buffer.front() && (text.empty() || text[0] != ' ')) {
+++                                text.insert(0, 1, ' ');
+++                            }
+++                        } else {
+++                            // prefix with space if previous is special
+++                            if (add_space_prefix && is_prev_special) {
+++                                text = ' ';
+++                            }
++ 
++-                        text += fragment.raw_text.substr(fragment.offset, fragment.length);
+++                            text += fragment.raw_text.substr(fragment.offset, fragment.length);
+++                        }
++ 
++ #ifdef PRETOKENIZERDEBUG
++                         LLAMA_LOG_WARN("TT: (%ld %ld %ld) '%s'\n", text.length(), fragment.offset, fragment.length, text.c_str());
+diff --git a/sdk/plugins/llama_cpp/src/params.cpp b/sdk/plugins/llama_cpp/src/params.cpp
+index acee1fd..3856ebe 100644
+--- a/sdk/plugins/llama_cpp/src/params.cpp
++++ b/sdk/plugins/llama_cpp/src/params.cpp
+@@ -92,6 +92,56 @@ std::optional<common_params_speculative> build_speculative_params(const geniex_M
+     return spar;
+ }
+ 
++// Optional KV-cache / flash-attention overrides from the environment (no FFI/ABI change):
++//   GENIEX_LLAMA_CACHE_TYPE_K, GENIEX_LLAMA_CACHE_TYPE_V : ggml type name (f16, q8_0, q4_0, ...)
++//   GENIEX_LLAMA_FLASH_ATTN                              : on | off | auto
++// Long-reasoning models need a quantized KV cache to fit on a phone: a looped model such as
++// Nanbeige4.2-3B keeps 44 logical layers of KV (176 KiB/token at F16, 5.5 GiB at 32k tokens).
++// The Hexagon backend runs FLASH_ATTN_EXT/SET_ROWS with F16 or Q8_0 K/V; other KV types fall back to CPU.
++static bool parse_ggml_type(const char* name, ggml_type* out) {
++    for (int t = 0; t < GGML_TYPE_COUNT; ++t) {
++        const char* tn = ggml_type_name(static_cast<ggml_type>(t));
++        if (tn && strcmp(tn, name) == 0) {
++            *out = static_cast<ggml_type>(t);
++            return true;
++        }
++    }
++    return false;
++}
++
++static void apply_kv_env_overrides(llama_context_params& cpar) {
++    const char* fa_env = std::getenv("GENIEX_LLAMA_FLASH_ATTN");
++    if (fa_env && fa_env[0] != '\0') {
++        if (strcmp(fa_env, "on") == 0 || strcmp(fa_env, "1") == 0) {
++            cpar.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_ENABLED;
++        } else if (strcmp(fa_env, "off") == 0 || strcmp(fa_env, "0") == 0) {
++            cpar.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_DISABLED;
++        } else if (strcmp(fa_env, "auto") == 0) {
++            cpar.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_AUTO;
++        } else {
++            GENIEX_LOG_WARN("ignoring GENIEX_LLAMA_FLASH_ATTN='{}' (expected on|off|auto)", fa_env);
++        }
++    }
++    const char* names[2] = {"GENIEX_LLAMA_CACHE_TYPE_K", "GENIEX_LLAMA_CACHE_TYPE_V"};
++    ggml_type*  dst[2]   = {&cpar.type_k, &cpar.type_v};
++    for (int i = 0; i < 2; ++i) {
++        const char* v = std::getenv(names[i]);
++        if (!v || v[0] == '\0') continue;
++        ggml_type t;
++        if (parse_ggml_type(v, &t)) {
++            *dst[i] = t;
++        } else {
++            GENIEX_LOG_WARN("ignoring {}='{}' (unknown ggml type)", names[i], v);
++        }
++    }
++    // llama.cpp only supports a quantized V cache with flash attention
++    if (ggml_is_quantized(cpar.type_v) && cpar.flash_attn_type == LLAMA_FLASH_ATTN_TYPE_DISABLED &&
++        !(fa_env && fa_env[0] != '\0')) {
++        cpar.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_ENABLED;
++        GENIEX_LOG_INFO("[Optimise] quantized V cache ({}) -> flash attention enabled", ggml_type_name(cpar.type_v));
++    }
++}
++
+ llama_context_params build_context_params(const geniex_ModelConfig& config, int32_t n_ctx_default, Device device,
+     const common_params_speculative* spec, OutputReservation output_reservation) {
+     // Linux NPU (IQ9/IQ8) is pinned to 128: ggml-hexagon's per-ubatch compute buffer can fail to
+@@ -130,6 +180,7 @@ llama_context_params build_context_params(const geniex_ModelConfig& config, int3
+     cpar.n_threads_batch      = resolve_n_threads(config.n_threads_batch);
+     cpar.flash_attn_type      = static_cast<llama_flash_attn_type>(fa);
+     cpar.no_perf              = false;
++    apply_kv_env_overrides(cpar);
+ 
+     if (spec) {
+         cpar.n_rs_seq     = spec->need_n_rs_seq();
+@@ -146,7 +197,7 @@ llama_context_params build_context_params(const geniex_ModelConfig& config, int3
+     GENIEX_LOG_INFO(
+         "[Optimise] context params: n_ctx={}, n_batch={}, n_ubatch={}, n_seq_max={}, n_threads={}, "
+         "n_threads_batch={}, flash_attn_type={}, swa_full={}, kv_unified={}, no_perf={}, n_rs_seq={}, "
+-        "n_outputs_max={}, n_outputs_max_per_seq={}",
++        "n_outputs_max={}, n_outputs_max_per_seq={}, type_k={}, type_v={}",
+         cpar.n_ctx,
+         cpar.n_batch,
+         cpar.n_ubatch,
+@@ -159,7 +210,9 @@ llama_context_params build_context_params(const geniex_ModelConfig& config, int3
+         cpar.no_perf,
+         cpar.n_rs_seq,
+         cpar.n_outputs_max,
+-        cpar.n_outputs_max_per_seq);
++        cpar.n_outputs_max_per_seq,
++        ggml_type_name(cpar.type_k),
++        ggml_type_name(cpar.type_v));
+     return cpar;
+ }
+ 

@@ -1,0 +1,13 @@
+# veRL tool config (actor_rollout_ref.rollout.multi_turn.tool_config_path) for KSAT math tool RL.
+# One tool: python(code) -> isolated sandbox service (rl/ksat_rl/tools/sandbox, http://ksat-tool-sandbox:8080 or
+# $KSAT_SANDBOX_URL).  tool_schema is omitted on purpose: KsatPythonTool uses ksat_rl.tools.schema.PYTHON_TOOL,
+# the exact schema of data/tool/tools_schema.json (TIR traces, few-shot demos, SGLang eval).
+tools:
+  - class_name: ksat_rl.tools.verl_tool.KsatPythonTool
+    config:
+      type: native
+      timeout: 10                    # seconds per call (sandbox caps at 10)
+      max_chars: 1000                # observation budget (sandbox caps stdout/stderr at 1000 each)
+      retries: 4                     # HTTP retries with backoff before reporting sandbox_error (infra fault)
+      http_timeout: 120              # per HTTP attempt, incl. queueing behind busy sandbox workers (bursts of 10 s programs)
+      max_calls_per_trajectory: 6    # matches multi_turn.max_user_turns
