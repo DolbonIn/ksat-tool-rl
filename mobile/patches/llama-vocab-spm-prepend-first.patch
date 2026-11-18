@@ -1,0 +1,41 @@
+diff --git a/src/llama-vocab.cpp b/src/llama-vocab.cpp
+index 229a051..dff1d7f 100644
+--- a/src/llama-vocab.cpp
++++ b/src/llama-vocab.cpp
+@@ -3828,7 +3828,7 @@ std::vector<llama_token> llama_vocab::impl::tokenize(
+                 // tokenizer.encode('', add_special_tokens=True)  returns [1]
+                 // tokenizer.encode('', add_special_tokens=False) returns []
+ 
+-                // TODO: honor metaspace_prepend_scheme (add_space_prefix currently behaves like "always")
++                // add_space_prefix behaves like "always" unless the vocab declares metaspace prepend_scheme "first"
+                 bool is_prev_special = true;  // prefix with space if first token
+ 
+                 if (add_special && add_bos) {
+@@ -3841,12 +3841,22 @@ std::vector<llama_token> llama_vocab::impl::tokenize(
+                     if (fragment.type == FRAGMENT_BUFFER_VARIANT_TYPE_RAW_TEXT) {
+                         std::string text;
+ 
+-                        // prefix with space if previous is special
+-                        if (add_space_prefix && is_prev_special) {
+-                            text = ' ';
+-                        }
++                        if (metaspace_prepend_scheme == LLAMA_METASPACE_PREPEND_SCHEME_FIRST) {
++                            // HF Metaspace prepend_scheme "first" (e.g. Nanbeige4.2): only the text at the very start of
++                            // the input gets the U+2581 prefix, and only if it does not already start with a space.
++                            // Text after a special token (<|im_start|>system, <think>\n, ...) is not prefixed.
++                            text = fragment.raw_text.substr(fragment.offset, fragment.length);
++                            if (add_space_prefix && &fragment == &fragment_buffer.front() && (text.empty() || text[0] != ' ')) {
++                                text.insert(0, 1, ' ');
++                            }
++                        } else {
++                            // prefix with space if previous is special
++                            if (add_space_prefix && is_prev_special) {
++                                text = ' ';
++                            }
+ 
+-                        text += fragment.raw_text.substr(fragment.offset, fragment.length);
++                            text += fragment.raw_text.substr(fragment.offset, fragment.length);
++                        }
+ 
+ #ifdef PRETOKENIZERDEBUG
+                         LLAMA_LOG_WARN("TT: (%ld %ld %ld) '%s'\n", text.length(), fragment.offset, fragment.length, text.c_str());

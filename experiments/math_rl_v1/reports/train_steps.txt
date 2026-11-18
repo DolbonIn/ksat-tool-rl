@@ -1,0 +1,41 @@
+step 0 VAL_acc@4=0.940
+step 1 reward=0.709 len=18587 clip=0.100 ent=0.117 gnorm=0.110 pgclip=0.002 mismatch=0.001 t_gen=518 t_upd=152 t_olp=89.848 t_sync=6.714 t_step=769
+step 2 reward=0.697 len=19994 clip=0.143 ent=0.114 gnorm=0.112 pgclip=0.002 mismatch=0.001 t_gen=574 t_upd=134 t_olp=35.547 t_sync=6.861 t_step=752
+step 3 reward=0.688 len=20232 clip=0.150 ent=0.115 gnorm=0.102 pgclip=0.002 mismatch=0.001 t_gen=584 t_upd=135 t_olp=36.312 t_sync=6.891 t_step=764
+step 4 reward=0.734 len=19453 clip=0.098 ent=0.114 gnorm=0.116 pgclip=0.002 mismatch=0.001 t_gen=548 t_upd=127 t_olp=35.246 t_sync=6.610 t_step=719
+step 5 reward=0.707 len=20545 clip=0.135 ent=0.122 gnorm=0.112 pgclip=0.002 mismatch=0.001 t_gen=584 t_upd=137 t_olp=37.246 t_sync=7.024 t_step=768
+step 6 reward=0.689 len=20207 clip=0.145 ent=0.119 gnorm=0.104 pgclip=0.002 mismatch=0.001 t_gen=601 t_upd=135 t_olp=36.924 t_sync=7.209 t_step=782
+step 7 reward=0.654 len=19102 clip=0.109 ent=0.118 gnorm=0.108 pgclip=0.002 mismatch=0.001 t_gen=580 t_upd=123 t_olp=34.104 t_sync=6.829 t_step=746
+step 8 reward=0.684 len=19197 clip=0.150 ent=0.122 gnorm=0.121 pgclip=0.002 mismatch=0.001 t_gen=584 t_upd=127 t_olp=34.454 t_sync=7.146 t_step=755
+step 9 reward=0.682 len=19292 clip=0.180 ent=0.120 gnorm=0.128 pgclip=0.002 mismatch=0.001 t_gen=579 t_upd=127 t_olp=34.866 t_sync=7.015 t_step=749
+step 10 reward=0.713 len=19722 clip=0.141 ent=0.124 gnorm=0.111 pgclip=0.002 mismatch=0.001 t_gen=582 t_upd=131 t_olp=37.163 t_sync=6.664 t_step=778 VAL_acc@4=0.951
+step 11 reward=0.723 len=19166 clip=0.139 ent=0.129 gnorm=0.119 pgclip=0.002 mismatch=0.001 t_gen=560 t_upd=125 t_olp=34.361 t_sync=6.932 t_step=729
+step 12 reward=0.705 len=19900 clip=0.135 ent=0.123 gnorm=0.114 pgclip=0.002 mismatch=0.001 t_gen=594 t_upd=131 t_olp=35.880 t_sync=7.101 t_step=770
+step 13 reward=0.717 len=19716 clip=0.154 ent=0.126 gnorm=0.112 pgclip=0.002 mismatch=0.001 t_gen=606 t_upd=130 t_olp=37.591 t_sync=7.038 t_step=783
+step 14 reward=0.633 len=21075 clip=0.137 ent=0.134 gnorm=0.108 pgclip=0.002 mismatch=0.001 t_gen=631 t_upd=142 t_olp=38.141 t_sync=6.880 t_step=819
+step 15 reward=0.713 len=19749 clip=0.141 ent=0.127 gnorm=0.113 pgclip=0.002 mismatch=0.001 t_gen=564 t_upd=130 t_olp=35.353 t_sync=6.655 t_step=739
+step 16 reward=0.844 len=17231 clip=0.061 ent=0.132 gnorm=0.096 pgclip=0.002 mismatch=0.001 t_gen=504 t_upd=107 t_olp=30.753 t_sync=6.632 t_step=650
+step 17 reward=0.742 len=19473 clip=0.146 ent=0.134 gnorm=0.099 pgclip=0.002 mismatch=0.001 t_gen=602 t_upd=129 t_olp=36.500 t_sync=6.533 t_step=776
+step 18 reward=0.750 len=19228 clip=0.105 ent=0.136 gnorm=0.095 pgclip=0.002 mismatch=0.001 t_gen=580 t_upd=126 t_olp=34.599 t_sync=7.223 t_step=749
+step 19 reward=0.729 len=18917 clip=0.117 ent=0.133 gnorm=0.103 pgclip=0.002 mismatch=0.001 t_gen=560 t_upd=122 t_olp=34.257 t_sync=6.890 t_step=725
+step 20 reward=0.689 len=18066 clip=0.121 ent=0.139 gnorm=0.113 pgclip=0.002 mismatch=0.001 t_gen=536 t_upd=118 t_olp=32.258 t_sync=7.137 t_step=715 VAL_acc@4=0.951
+step 21 reward=0.662 len=20760 clip=0.123 ent=0.143 gnorm=0.104 pgclip=0.002 mismatch=0.001 t_gen=691 t_upd=139 t_olp=37.733 t_sync=6.987 t_step=877
+step 22 reward=0.750 len=18675 clip=0.107 ent=0.142 gnorm=0.109 pgclip=0.002 mismatch=0.001 t_gen=548 t_upd=122 t_olp=33.825 t_sync=6.733 t_step=713
+step 23 reward=0.775 len=17973 clip=0.096 ent=0.148 gnorm=0.105 pgclip=0.002 mismatch=0.001 t_gen=548 t_upd=113 t_olp=32.262 t_sync=6.606 t_step=702
+step 24 reward=0.762 len=18903 clip=0.107 ent=0.150 gnorm=0.107 pgclip=0.002 mismatch=0.001 t_gen=552 t_upd=122 t_olp=34.848 t_sync=7.138 t_step=718
+step 25 reward=0.777 len=18110 clip=0.105 ent=0.151 gnorm=0.116 pgclip=0.002 mismatch=0.001 t_gen=522 t_upd=117 t_olp=32.882 t_sync=6.718 t_step=681
+step 26 reward=0.701 len=21615 clip=0.199 ent=0.158 gnorm=0.097 pgclip=0.002 mismatch=0.001 t_gen=646 t_upd=145 t_olp=40.383 t_sync=6.753 t_step=841
+step 27 reward=0.748 len=18915 clip=0.109 ent=0.161 gnorm=0.116 pgclip=0.002 mismatch=0.001 t_gen=552 t_upd=124 t_olp=34.757 t_sync=6.813 t_step=719
+step 28 reward=0.783 len=20503 clip=0.145 ent=0.167 gnorm=0.093 pgclip=0.003 mismatch=0.001 t_gen=612 t_upd=136 t_olp=37.286 t_sync=6.768 t_step=794
+step 29 reward=0.734 len=19473 clip=0.145 ent=0.174 gnorm=0.104 pgclip=0.002 mismatch=0.001 t_gen=568 t_upd=127 t_olp=34.682 t_sync=6.660 t_step=739
+step 30 reward=0.707 len=20658 clip=0.182 ent=0.170 gnorm=0.139 pgclip=0.003 mismatch=0.001 t_gen=623 t_upd=139 t_olp=37.591 t_sync=6.954 t_step=827 VAL_acc@4=0.973
+step 31 reward=0.787 len=18405 clip=0.137 ent=0.172 gnorm=0.105 pgclip=0.003 mismatch=0.001 t_gen=558 t_upd=119 t_olp=33.577 t_sync=6.850 t_step=720
+step 32 reward=0.723 len=20600 clip=0.164 ent=0.178 gnorm=0.108 pgclip=0.002 mismatch=0.001 t_gen=596 t_upd=138 t_olp=37.501 t_sync=6.868 t_step=781
+step 33 reward=0.734 len=19885 clip=0.188 ent=0.186 gnorm=0.098 pgclip=0.002 mismatch=0.001 t_gen=604 t_upd=132 t_olp=36.412 t_sync=7.036 t_step=781
+step 34 reward=0.779 len=19900 clip=0.150 ent=0.181 gnorm=0.093 pgclip=0.002 mismatch=0.001 t_gen=598 t_upd=130 t_olp=36.297 t_sync=7.217 t_step=773
+step 35 reward=0.789 len=19926 clip=0.135 ent=0.183 gnorm=0.098 pgclip=0.002 mismatch=0.001 t_gen=600 t_upd=129 t_olp=35.992 t_sync=6.849 t_step=774
+step 36 reward=0.760 len=20526 clip=0.156 ent=0.188 gnorm=0.114 pgclip=0.002 mismatch=0.001 t_gen=626 t_upd=138 t_olp=37.162 t_sync=7.288 t_step=810
+step 37 reward=0.826 len=18493 clip=0.146 ent=0.194 gnorm=0.094 pgclip=0.002 mismatch=0.001 t_gen=560 t_upd=121 t_olp=33.401 t_sync=6.795 t_step=724
+step 38 reward=0.793 len=20786 clip=0.172 ent=0.193 gnorm=0.094 pgclip=0.002 mismatch=0.001 t_gen=632 t_upd=138 t_olp=38.223 t_sync=6.610 t_step=817
+step 39 reward=0.785 len=19851 clip=0.166 ent=0.200 gnorm=0.087 pgclip=0.002 mismatch=0.001 t_gen=646 t_upd=132 t_olp=35.890 t_sync=6.558 t_step=823
+step 40 reward=0.807 len=19954 clip=0.170 ent=0.197 gnorm=0.084 pgclip=0.002 mismatch=0.001 t_gen=632 t_upd=132 t_olp=36.050 t_sync=6.920 t_step=829 VAL_acc@4=0.962

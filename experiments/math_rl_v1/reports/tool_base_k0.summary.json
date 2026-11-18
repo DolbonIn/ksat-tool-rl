@@ -1,0 +1,74 @@
+{
+ "prob_stat": {
+  "expected": 79.25,
+  "per_sample": [
+   62,
+   73,
+   85,
+   84,
+   84,
+   92,
+   84,
+   70
+  ],
+  "majority": 89
+ },
+ "calculus": {
+  "expected": 76.5,
+  "per_sample": [
+   68,
+   69,
+   81,
+   84,
+   77,
+   92,
+   80,
+   61
+  ],
+  "majority": 92
+ },
+ "geometry": {
+  "expected": 77.75,
+  "per_sample": [
+   64,
+   76,
+   73,
+   84,
+   84,
+   92,
+   84,
+   65
+  ],
+  "majority": 92
+ },
+ "trunc": 10,
+ "errors": 1,
+ "acc": 0.8097826086956522,
+ "n": 8,
+ "tool": {
+  "calls_per_episode": {
+   "0": 53,
+   "1": 102,
+   "2": 70,
+   "3": 43,
+   "4": 33,
+   "5": 23,
+   "6": 44
+  },
+  "mean_calls": 2.397,
+  "episodes_with_tool": 315,
+  "tool_status": {
+   "calls": 882,
+   "ok": 561,
+   "error": 213,
+   "invalid": 108
+  },
+  "finish": {
+   "stop": 318,
+   "tool_budget": 39,
+   "length": 10,
+   "error: Server discon": 1
+  },
+  "tool_demos": 0
+ }
+}

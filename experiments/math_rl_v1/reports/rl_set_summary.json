@@ -1,0 +1,56 @@
+{
+ "train_real": 327,
+ "train_synth": 356,
+ "val": 46,
+ "test": 46,
+ "no_rate": 0,
+ "train_real_by_section": {
+  "common": 61,
+  "calculus": 44,
+  "geometry": 46,
+  "prob_stat": 30,
+  "ga": 82,
+  "na": 64
+ },
+ "train_real_by_exam": {
+  "csat": 52,
+  "kice_06": 42,
+  "kice_09": 34,
+  "edu_03": 40,
+  "edu_04": 51,
+  "edu_07": 47,
+  "edu_10": 61
+ },
+ "train_real_by_era": {
+  "2022-2026": 181,
+  "2017-2021": 146
+ },
+ "train_synth_by_section": {
+  "geometry": 83,
+  "calculus": 68,
+  "prob_stat": 65,
+  "common": 140
+ },
+ "real_rate_hist": {
+  "0": 56,
+  "1": 27,
+  "2": 16,
+  "3": 21,
+  "4": 28,
+  "5": 41,
+  "6": 57,
+  "7": 144,
+  "8": 2083
+ },
+ "synth_rate_hist": {
+  "0": 56,
+  "1": 30,
+  "2": 17,
+  "3": 29,
+  "4": 27,
+  "5": 46,
+  "6": 70,
+  "7": 137,
+  "8": 900
+ }
+}
